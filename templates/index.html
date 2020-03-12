@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        General MLM
+        <small>Multi Level Marketing</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- COLOR PALETTE -->
+      <div class="box box-default color-palette-box">
+        <div class="box-header with-border">
+          <h3 class="box-title"><i class="fa fa-tag"></i> Users Tree</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+
+                        <div class="middle">
+                            <!-- <div class="content-header">
+                                <table cellspacing="0">
+                                    <tr>
+                                        <td>
+                                            <h3 class="head-dashboard">
+                                                Downline for Step 1 ==> Bronze Tree</h3>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div> -->
+                            <div class="dashboard-container">  
+                    <div class="col-lg-2 col-lg-offset-5">
+                        <select class="form-control" id="select-user">
+                            {% for user in users %}
+                                <option value='{{ user.id }}'>{{ user.username|title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                                
+                    <table id="Menu_tblMain" style="width: 100%;">
+                    <tr>
+                        <td colspan="8" align="center">
+                            </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8" align="left">
+                            
+                            <h3 class="head-dashboard">
+                                                </h3>
+                            
+                            </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8" align="center">
+                                <span id="Menu_lblError" style="color:Red;"></span>
+                            </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8" align="center">
+                                {% if level_one %}
+                                    <img id="Menu_img" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <a id="Menu_lnkUserId" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId&#39;,&#39;&#39;)">{{ level_one.user.user_profile.mobile }}</a>
+                                <br />
+                                <span id="Menu_lblName">{{ level_one.user.username|title }}</span>
+                            </td>
+                        <td align="center">
+                                &nbsp;
+                            </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8" align="center">
+                                <img id="Menu_Image1" src="{% static 'dist/img/arrow.png'%}" style="height:29px;width:620px;" />
+                            </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" align="center">
+                                {% if partner_one_left %}
+                                    <img id="Menu_img11" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <a id="Menu_lnkUserId11" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId11&#39;,&#39;&#39;)">{{ partner_one_left.partner_user.user_profile.mobile }}</a>
+                                <br />
+                                <span id="Menu_lblName11">{{ partner_one_left.partner_user.username|title }}</span>
+                            </td>
+                        <td colspan="4" align="center">
+                                {% if partner_one_right %}
+                                    <img id="Menu_img11" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <input type="hidden" name="ctl00$Menu$hdnUserId12" id="Menu_hdnUserId12" value="11" />
+                                <a id="Menu_lnkUserId12" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId12&#39;,&#39;&#39;)">{{ partner_one_right.partner_user.user_profile.mobile  }}</a>
+                                <br />
+                                <span id="Menu_lblName12">{{ partner_one_right.partner_user.username|title }}</span>
+                            </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" align="center">
+                                <img id="Menu_Image2" src="{% static 'dist/img/arrow.png'%}" style="width:311px;" />
+                            </td>
+                        <td colspan="4" align="center">
+                                <img id="Menu_Image3" src="{% static 'dist/img/arrow.png'%}" style="width:311px;" />
+                            </td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="width: 25%;" colspan="2">
+                                
+                                {% if partner_two_a_left %}
+                                    <img id="Menu_img11" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <br />
+                                <a id="Menu_lnkUserId121" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId121&#39;,&#39;&#39;)">{{ partner_two_a_left.partner_user.user_profile.mobile  }}</a>
+                                <br />
+                                <span id="Menu_lblName121">{{ partner_two_a_left.partner_user.username|title }}</span>
+                            </td>
+                        <td align="center" style="width: 25%;" colspan="2">
+                                {% if partner_two_a_right %}
+                                    <img id="Menu_img11" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <input type="hidden" name="ctl00$Menu$hdnUserId122" id="Menu_hdnUserId122" value="261" />
+                                <a id="Menu_lnkUserId122" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId122&#39;,&#39;&#39;)">{{ partner_two_a_right.partner_user.user_profile.mobile  }}</a>
+                                <br />
+                                <span id="Menu_lblName122">{{ partner_two_a_right.partner_user.username|title }}</span>
+                            </td>
+                        <td align="center" style="width: 25%;" colspan="2">
+                                {% if partner_two_b_left %}
+                                    <img id="Menu_img11" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <input type="hidden" name="ctl00$Menu$hdnUserId221" id="Menu_hdnUserId221" value="362" />
+                                <a id="Menu_lnkUserId221" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId221&#39;,&#39;&#39;)">{{ partner_two_b_left.partner_user.user_profile.mobile  }}</a>
+                                <br />
+                                <span id="Menu_lblName221">{{ partner_two_b_left.partner_user.username|title }}</span>
+                            </td>
+                        <td align="center" style="width: 25%;" colspan="2">
+                                {% if partner_two_b_right %}
+                                    <img id="Menu_img11" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <input type="hidden" name="ctl00$Menu$hdnUserId222" id="Menu_hdnUserId222" value="13" />
+                                <a id="Menu_lnkUserId222" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId222&#39;,&#39;&#39;)">{{ partner_two_b_right.partner_user.user_profile.mobile  }}</a>
+                                <br />
+                                <span id="Menu_lblName222">{{ partner_two_b_right.partner_user.username|title }}</span>
+                            </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center">
+                                <img id="Menu_Image4" src="{% static 'dist/img/arrow.png'%}" style="width:150px;" />
+                            </td>
+                        <td colspan="2" align="center">
+                                <img id="Menu_Image5" src="{% static 'dist/img/arrow.png'%}" style="width:150px;" />
+                            </td>
+                        <td colspan="2" align="center">
+                                <img id="Menu_Image6" src="{% static 'dist/img/arrow.png'%}" style="width:150px;" />
+                            </td>
+                        <td colspan="2" align="center">
+                                <img id="Menu_Image7" src="{% static 'dist/img/arrow.png'%}" style="width:150px;" />
+                            </td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="width: 12%">
+                                {% if partner_three_left_a_left %}
+                                    <img id="Menu_img11" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <input type="hidden" name="ctl00$Menu$hdnUserId223" id="Menu_hdnUserId223" value="589" />
+                                <a id="Menu_lnkUserId223" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId223&#39;,&#39;&#39;)">{{ partner_three_left_a_left.partner_user.user_profile.mobile  }}</a>
+                                <br />
+                                <span id="Menu_lblName223">{{ partner_three_left_a_left.partner_user.username|title }}</span>
+                            </td>
+                        <td align="center" style="width: 12%">
+                                {% if partner_three_left_a_right %}
+                                    <img id="Menu_img11" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <input type="hidden" name="ctl00$Menu$hdnUserId224" id="Menu_hdnUserId224" />
+                                <a id="Menu_lnkUserId223" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId223&#39;,&#39;&#39;)">{{ partner_three_left_a_right.partner_user.user_profile.mobile  }}</a>
+                                <br />
+                                <span id="Menu_lblName224">{{ partner_three_left_a_right.partner_user.username|title }}</span>
+                            </td>
+                        <td align="center" style="width: 12%">
+                                {% if partner_three_left_b_left %}
+                                    <img id="Menu_img11" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <input type="hidden" name="ctl00$Menu$hdnUserId225" id="Menu_hdnUserId225" />
+                                <a id="Menu_lnkUserId223" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId223&#39;,&#39;&#39;)">{{ partner_three_left_b_left.partner_user.user_profile.mobile  }}</a>
+                                <br />
+                                <span id="Menu_lblName225">{{ partner_three_left_b_left.partner_user.username|title }}</span>
+                            </td>
+                        <td align="center" style="width: 12%">
+                                {% if partner_three_left_b_right %}
+                                    <img id="Menu_img11" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <input type="hidden" name="ctl00$Menu$hdnUserId226" id="Menu_hdnUserId226" />
+                                <a id="Menu_lnkUserId223" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId223&#39;,&#39;&#39;)">{{ partner_three_left_b_right.partner_user.user_profile.mobile  }}</a>
+                                
+                                <br />
+                                <span id="Menu_lblName226">{{ partner_three_left_b_right.partner_user.username|title }}</span>
+                            </td>
+                        <td align="center" style="width: 12%">
+                                {% if partner_three_right_a_left %}
+                                    <img id="Menu_img11" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <input type="hidden" name="ctl00$Menu$hdnUserId227" id="Menu_hdnUserId227" value="363" />
+                                <a id="Menu_lnkUserId227" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId227&#39;,&#39;&#39;)">{{ partner_three_right_a_left.partner_user.user_profile.mobile  }}</a>
+                                <br />
+                                <span id="Menu_lblName227">{{ partner_three_right_a_left.partner_user.username|title }}</span>
+                            </td>
+                        <td align="center" style="width: 12%">
+                                {% if partner_three_right_a_right %}
+                                    <img id="Menu_img11" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <input type="hidden" name="ctl00$Menu$hdnUserId228" id="Menu_hdnUserId228" value="364" />
+                                <a id="Menu_lnkUserId228" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId228&#39;,&#39;&#39;)">{{ partner_three_right_a_right.partner_user.user_profile.mobile  }}</a>
+                                <br />
+                                <span id="Menu_lblName228">{{ partner_three_right_a_right.partner_user.username|title }}</span>
+                            </td>
+                        <td align="center" style="width: 12%">
+                                {% if partner_three_right_b_left %}
+                                    <img id="Menu_img11" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <input type="hidden" name="ctl00$Menu$hdnUserId229" id="Menu_hdnUserId229" value="14" />
+                                <a id="Menu_lnkUserId229" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId229&#39;,&#39;&#39;)">{{ partner_three_right_b_left.partner_user.user_profile.mobile  }}</a>
+                                <br />
+                                <span id="Menu_lblName229">{{ partner_three_right_b_left.partner_user.username|title }}</span>
+                            </td>
+                        <td align="center" style="width: 12%">
+                                {% if partner_three_right_b_right %}
+                                    <img id="Menu_img11" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
+                                {% else %}
+                                    <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
+                                {% endif %}
+                                <br />
+                                <input type="hidden" name="ctl00$Menu$hdnUserId230" id="Menu_hdnUserId230" value="15" />
+                                <a id="Menu_lnkUserId230" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId230&#39;,&#39;&#39;)">{{ partner_three_right_b_right.partner_user.user_profile.mobile  }}</a>
+                                <br />
+                                <span id="Menu_lblName230">{{ partner_three_right_b_right.partner_user.username|title }}</span>
+                            </td>
+                    </tr>
+                </table>
+
+
+                            </div>
+                        </div>
+
+            </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+  <script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="{% static 'bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
+  <script>
+  $(function(){
+      $('#select-user option:contains("{{ user_kw }}")').prop('selected',true);
+      $('#select-user').on('change', function(){
+          window.location.href = '{% url 'common:index' %}?user_id=' + $(this).val()
+      });
+  });
+  </script>
+{% endblock %}
