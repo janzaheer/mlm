@@ -1,21 +1,53 @@
-from django.views.generic import TemplateView
+from django.contrib.auth import forms as auth_forms
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import authenticate
+from django.urls import reverse, reverse_lazy
+
+from django.views.generic import TemplateView, FormView, RedirectView
 from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Partner
+from .models import Partner, Member
 
-class IndexView(TemplateView):
+
+class LoginView(FormView):
+    form_class = auth_forms.AuthenticationForm
+    template_name = 'login.html'
+
+    
+    def form_valid(self, form):
+        user = form.get_user()
+        auth_login(self.request, user)
+        return HttpResponseRedirect(reverse('common:index'))
+    
+    def form_invalid(self, form):
+        return super().form_invalid(form)
+
+
+class LogoutView(RedirectView):
+    def dispatch(self, request, *args, **kwargs):
+        auth_logout(self.request)
+        return super(LogoutView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(reverse('common:login'))
+
+
+class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'index.html'
+    login_url = reverse_lazy('common:login')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
         context.update({
-            'users': User.objects.all().order_by('username'),
-            'user_kw': User.objects.get(id=self.request.GET.get('user_id', 1)).username.title()
+            'member': Member.objects.get(id=self.request.GET.get('user_id', 1))
         })
 
         # Level One
-        level_one = Partner.objects.filter(user__id=self.request.GET.get('user_id', 1))
+        level_one = Partner.objects.filter(member_parent__id=self.request.GET.get('user_id', 1))
         if level_one:
             try:
                 partner_one_left = level_one.get(position=Partner.POSITION_LEFT)
@@ -38,7 +70,7 @@ class IndexView(TemplateView):
         
         if partner_one_left:
             try:
-                level_two_a = Partner.objects.filter(user__id=partner_one_left.partner_user.id)
+                level_two_a = Partner.objects.filter(member_parent__id=partner_one_left.member_child.id)
             except:
                 level_two_a = None
             
@@ -64,7 +96,7 @@ class IndexView(TemplateView):
         # Level Two Right
         if partner_one_right:
             try:
-                level_two_b = Partner.objects.filter(user__id=partner_one_right.partner_user.id)
+                level_two_b = Partner.objects.filter(member_parent__id=partner_one_right.member_child.id)
             except:
                 level_two_b = None
             
@@ -90,7 +122,7 @@ class IndexView(TemplateView):
         # Level Three Left A
         if partner_two_a_left:
             try:
-                level_three_a = Partner.objects.filter(user__id=partner_two_a_left.partner_user.id)
+                level_three_a = Partner.objects.filter(member_parent__id=partner_two_a_left.member_child.id)
             except:
                 level_three_a = None
             
@@ -116,7 +148,7 @@ class IndexView(TemplateView):
         #Level Three Left B
         if partner_two_a_right:
             try:
-                level_three_b = Partner.objects.filter(user__id=partner_two_a_right.partner_user.id)
+                level_three_b = Partner.objects.filter(member_parent__id=partner_two_a_right.member_child.id)
             except:
                 level_three_b = None
             
@@ -142,7 +174,7 @@ class IndexView(TemplateView):
         # Level Three Right A
         if partner_two_b_left:
             try:
-                level_three_c = Partner.objects.filter(user__id=partner_two_b_left.partner_user.id)
+                level_three_c = Partner.objects.filter(member_parent__id=partner_two_b_left.member_child.id)
             except:
                 level_three_c = None
             
@@ -168,7 +200,7 @@ class IndexView(TemplateView):
         # Level Three Right B
         if partner_two_b_right:
             try:
-                level_three_d = Partner.objects.filter(user__id=partner_two_b_right.partner_user.id)
+                level_three_d = Partner.objects.filter(member_parent__id=partner_two_b_right.member_child.id)
             except:
                 level_three_d = None
             

@@ -1,15 +1,20 @@
 from django.contrib import admin
 
-from .models import UserProfile, Partner
+from .models import UserProfile, Partner, Member
 
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'mobile', 'gender',)
 
 
+class MemberAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'mobile', 'gender')
+
+
 class PartnerAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'partner_user', 'position')
+    list_display = ('__str__', 'member_child', 'position')
 
 
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Partner, PartnerAdmin)
+admin.site.register(Member, MemberAdmin)

@@ -24,6 +24,28 @@ class UserProfile(models.Model):
         return self.user.username
     
 
+class Member(models.Model):
+    GENDER_MALE = 'male'
+    GENDER_FEMALE = 'female'
+    
+    GENDERS = (
+        (GENDER_MALE, 'Male'),
+        (GENDER_FEMALE, 'Female'),
+    )
+
+    name = models.CharField(max_length=200, unique=True)
+    mobile = models.CharField(max_length=20, unique=True, blank=True, null=True)
+    gender = models.CharField(
+        max_length=100, default=GENDER_MALE, choices=GENDERS,
+        blank=True, null=True
+    )
+    step_id = models.IntegerField(blank=True, null=True, default=1)
+
+    def __str__(self):
+        return self.name
+    
+
+
 class Partner(models.Model):
     POSITION_LEFT = 'left'
     POSITION_RIGHT = 'right'
@@ -33,13 +55,15 @@ class Partner(models.Model):
         (POSITION_RIGHT, 'Right')
     )
 
-    user = models.ForeignKey(
-        User, related_name='user_partner', on_delete=models.CASCADE
+    member_parent = models.ForeignKey(
+        Member, related_name='member_as_parent', on_delete=models.CASCADE
     )
-    partner_user = models.ForeignKey(
-        User, related_name='user_as_partner', on_delete=models.SET_NULL,
-        blank=True, null=True
+
+    member_child = models.ForeignKey(
+        Member, related_name='member_as_child', on_delete=models.SET_NULL,
+         blank=True, null=True
     )
+
     position = models.CharField(
         max_length=100, default=POSITION_LEFT, choices=POSITIONS,
         blank=True, null=True
@@ -47,7 +71,7 @@ class Partner(models.Model):
     step_id = models.IntegerField(blank=True, null=True, default=1)
 
     def __str__(self):
-        return self.user.username
+        return self.member_parent.name
     
 
 # Signal Functions
