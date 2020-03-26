@@ -67,15 +67,19 @@
                     </tr>
                     <tr>
                         <td colspan="8" align="center">
-                                {% if level_one %}
+                                {% if level_one or member.0 %}
                                     <img id="Menu_img" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
                                 {% else %}
                                     <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
                                 {% endif %}
                                 <br />
-                                <a id="Menu_lnkUserId" href="{% url 'common:index' %}?user_id={{ level_one.member_parent.id }}">{{ level_one.member_parent.mobile }}</a>
+                                {% if level_one %}
+                                    <a id="Menu_lnkUserId" href="{% url 'common:index' %}?user_id={{ level_one.member_parent.id }}">{{ level_one.member_parent.mobile }}</a>
+                                {% else %}
+                                    <a id="Menu_lnkUserId" href="{% url 'common:index' %}?user_id={{ member.0.id }}">{{ member.0.mobile }}</a>
+                                {% endif %}
                                 <br />
-                                <span id="Menu_lblName">{{ level_one.member_parent.name|title }}</span>
+                                <span id="Menu_lblName">{% if level_one %}{{ level_one.member_parent.name|title }}{% else %}{{ member.0.name|title }}{% endif %}</span>
                         </td>
                         <td align="center">
                                 &nbsp;
