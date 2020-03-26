@@ -228,7 +228,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
     
 
 
-class CreateMemberFormView(FormView):
+class CreateMemberFormView(LoginRequiredMixin, FormView):
     template_name = 'create_member.html'
     form_class = MemberForm
 
@@ -251,7 +251,7 @@ class CreateMemberFormView(FormView):
         return context
 
 
-class MemberList(ListView):
+class MemberList(LoginRequiredMixin, ListView):
     model = Member
     template_name='list_member.html'
     pagination_by=100
