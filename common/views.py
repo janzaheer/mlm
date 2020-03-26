@@ -4,12 +4,13 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import authenticate
 from django.urls import reverse, reverse_lazy
 
-from django.views.generic import TemplateView, FormView, RedirectView
+from django.views.generic import TemplateView, FormView, RedirectView, ListView
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Partner, Member
+from .forms import MemberForm
 
 
 class LoginView(FormView):
@@ -43,11 +44,11 @@ class IndexView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         
         context.update({
-            'member': Member.objects.get(id=self.request.GET.get('user_id', 1))
+            'member': Member.objects.filter(id=self.request.GET.get('user_id', 1))
         })
 
         # Level One
-        level_one = Partner.objects.filter(member_parent__id=self.request.GET.get('user_id', 1))
+        level_one = Partner.objects.filter(member_parent__id=self.request.GET.get('user_id', 1), member_parent__step_id=self.request.GET.get('step_id', 1))
         if level_one:
             try:
                 partner_one_left = level_one.get(position=Partner.POSITION_LEFT)
@@ -70,7 +71,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         
         if partner_one_left:
             try:
-                level_two_a = Partner.objects.filter(member_parent__id=partner_one_left.member_child.id)
+                level_two_a = Partner.objects.filter(member_parent__id=partner_one_left.member_child.id, member_parent__step_id=self.request.GET.get('step_id', 1))
             except:
                 level_two_a = None
             
@@ -96,7 +97,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         # Level Two Right
         if partner_one_right:
             try:
-                level_two_b = Partner.objects.filter(member_parent__id=partner_one_right.member_child.id)
+                level_two_b = Partner.objects.filter(member_parent__id=partner_one_right.member_child.id, member_parent__step_id=self.request.GET.get('step_id', 1))
             except:
                 level_two_b = None
             
@@ -122,7 +123,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         # Level Three Left A
         if partner_two_a_left:
             try:
-                level_three_a = Partner.objects.filter(member_parent__id=partner_two_a_left.member_child.id)
+                level_three_a = Partner.objects.filter(member_parent__id=partner_two_a_left.member_child.id, member_parent__step_id=self.request.GET.get('step_id', 1))
             except:
                 level_three_a = None
             
@@ -148,7 +149,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         #Level Three Left B
         if partner_two_a_right:
             try:
-                level_three_b = Partner.objects.filter(member_parent__id=partner_two_a_right.member_child.id)
+                level_three_b = Partner.objects.filter(member_parent__id=partner_two_a_right.member_child.id, member_parent__step_id=self.request.GET.get('step_id', 1))
             except:
                 level_three_b = None
             
@@ -174,7 +175,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         # Level Three Right A
         if partner_two_b_left:
             try:
-                level_three_c = Partner.objects.filter(member_parent__id=partner_two_b_left.member_child.id)
+                level_three_c = Partner.objects.filter(member_parent__id=partner_two_b_left.member_child.id, member_parent__step_id=self.request.GET.get('step_id', 1))
             except:
                 level_three_c = None
             
@@ -200,7 +201,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         # Level Three Right B
         if partner_two_b_right:
             try:
-                level_three_d = Partner.objects.filter(member_parent__id=partner_two_b_right.member_child.id)
+                level_three_d = Partner.objects.filter(member_parent__id=partner_two_b_right.member_child.id, member_parent__step_id=self.request.GET.get('step_id', 1))
             except:
                 level_three_d = None
             
@@ -226,3 +227,31 @@ class IndexView(LoginRequiredMixin, TemplateView):
         return context
     
 
+
+class CreateMemberFormView(FormView):
+    template_name = 'create_member.html'
+    form_class = MemberForm
+
+    def form_valid(self, form):
+
+        member_parent = Member.objects.get(id=self.request.POST.get('parent_id'))
+        member = form.save()
+
+        partner = Partner.objects.create(
+            member_parent=member_parent,
+            member_child=member,
+            position=self.request.POST.get('position')
+        )
+
+        return HttpResponseRedirect(reverse('common:index'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context[""] = 
+        return context
+
+
+class MemberList(ListView):
+    model = Member
+    template_name='list_member.html'
+    pagination_by=100

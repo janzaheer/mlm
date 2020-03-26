@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+        <section class="content-header">
+        <h1>
+            General MLM
+            <small>Multi Level Marketing</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Member Create</li>
+        </ol>
+        </section>
+
+        <section class="content">
+        <!-- COLOR PALETTE -->
+        <div class="box box-default color-palette-box">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-tag"></i> Create Member</h3>
+            </div>
+            <div class="box-body">
+                {{form.errors}}
+                <div class="row">
+                    <form action="{% url 'common:create_member' %}" method="POST"><br>
+                        {% csrf_token %}
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" placeholder="Name" name="name" required></input><br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Mobile No.</label>
+                                    <input type="text" class="form-control" placeholder="Mobile No" name="mobile" required></input><br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Gender</label>
+                                    <select class="form-control" name="gender">
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select><br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Parent ID</label>
+                                    <input type="number" class="form-control" placeholder="Parent ID" name="parent_id" required></input><br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Position</label>
+                                    <select class="form-control" name="postion">
+                                        <option value="left">Left</option>
+                                        <option value="right">Right</option>
+                                    </select><br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Step ID</label>
+                                    <input type="number" class="form-control" placeholder="Step ID" name="step_id" value="1"></input><br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 text-right">
+                                    <button type="submit" class="btn btn-primary">Save</button><br>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </section>  
+    </div>
+
+
+{% endblock %}

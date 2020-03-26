@@ -41,7 +41,7 @@
                             <label>Enter User ID: </label>
                         </div>
                         <div class="col-lg-2">
-                            <input type="number" name="user_id" placeholder="Enter Member ID" class="form-control" value="{{ member.id }}"></input>
+                            <input type="number" name="user_id" placeholder="Enter Member ID" class="form-control" value="{{ member.0.id }}"></input>
                         </div>
                         <div class="col-lg-2">
                             <button type="submit" class="btn btn-primary">Filter</button>
@@ -73,13 +73,13 @@
                                     <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
                                 {% endif %}
                                 <br />
-                                <a id="Menu_lnkUserId" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId&#39;,&#39;&#39;)">{{ level_one.member_parent.mobile }}</a>
+                                <a id="Menu_lnkUserId" href="{% url 'common:index' %}?user_id={{ level_one.member_parent.id }}">{{ level_one.member_parent.mobile }}</a>
                                 <br />
                                 <span id="Menu_lblName">{{ level_one.member_parent.name|title }}</span>
-                            </td>
+                        </td>
                         <td align="center">
                                 &nbsp;
-                            </td>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="8" align="center">
@@ -94,7 +94,7 @@
                                     <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
                                 {% endif %}
                                 <br />
-                                <a id="Menu_lnkUserId11" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId11&#39;,&#39;&#39;)">{{ partner_one_left.member_child.mobile }}</a>
+                                <a id="Menu_lnkUserId11" href="{% url 'common:index' %}?user_id={{ partner_one_left.member_child.id }}">{{ partner_one_left.member_child.mobile }}</a>
                                 <br />
                                 <span id="Menu_lblName11">{{ partner_one_left.member_child.name|title }}</span>
                             </td>
@@ -106,7 +106,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId12" id="Menu_hdnUserId12" value="11" />
-                                <a id="Menu_lnkUserId12" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId12&#39;,&#39;&#39;)">{{ partner_one_right.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId12" href="{% url 'common:index' %}?user_id={{ partner_one_right.member_child.id }}">{{ partner_one_right.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName12">{{ partner_one_right.member_child.name|title }}</span>
                             </td>
@@ -128,8 +128,7 @@
                                     <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
                                 {% endif %}
                                 <br />
-                                <br />
-                                <a id="Menu_lnkUserId121" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId121&#39;,&#39;&#39;)">{{ partner_two_a_left.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId121" href="{% url 'common:index' %}?user_id={{ partner_two_a_left.member_child.id }}">{{ partner_two_a_left.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName121">{{ partner_two_a_left.member_child.name|title }}</span>
                             </td>
@@ -141,7 +140,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId122" id="Menu_hdnUserId122" value="261" />
-                                <a id="Menu_lnkUserId122" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId122&#39;,&#39;&#39;)">{{ partner_two_a_right.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId122" href="{% url 'common:index' %}?user_id={{ partner_two_a_right.member_child.id }}">{{ partner_two_a_right.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName122">{{ partner_two_a_right.member_child.name|title }}</span>
                             </td>
@@ -153,7 +152,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId221" id="Menu_hdnUserId221" value="362" />
-                                <a id="Menu_lnkUserId221" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId221&#39;,&#39;&#39;)">{{ partner_two_b_left.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId221" href="{% url 'common:index' %}?user_id={{ partner_two_b_left.member_child.id }}">{{ partner_two_b_left.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName221">{{ partner_two_b_left.member_child.name|title }}</span>
                             </td>
@@ -165,7 +164,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId222" id="Menu_hdnUserId222" value="13" />
-                                <a id="Menu_lnkUserId222" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId222&#39;,&#39;&#39;)">{{ partner_two_b_right.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId222" href="{% url 'common:index' %}?user_id={{ partner_two_b_right.member_child.id }}">{{ partner_two_b_right.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName222">{{ partner_two_b_right.member_child.name|title }}</span>
                             </td>
@@ -193,7 +192,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId223" id="Menu_hdnUserId223" value="589" />
-                                <a id="Menu_lnkUserId223" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId223&#39;,&#39;&#39;)">{{ partner_three_left_a_left.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId223" href="{% url 'common:index' %}?user_id={{ partner_three_left_a_left.member_child.id }}">{{ partner_three_left_a_left.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName223">{{ partner_three_left_a_left.member_child.name|title }}</span>
                             </td>
@@ -205,7 +204,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId224" id="Menu_hdnUserId224" />
-                                <a id="Menu_lnkUserId223" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId223&#39;,&#39;&#39;)">{{ partner_three_left_a_right.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId223" href="{% url 'common:index' %}?user_id={{ partner_three_left_a_right.member_child.id }}">{{ partner_three_left_a_right.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName224">{{ partner_three_left_a_right.member_child.name|title }}</span>
                             </td>
@@ -217,7 +216,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId225" id="Menu_hdnUserId225" />
-                                <a id="Menu_lnkUserId223" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId223&#39;,&#39;&#39;)">{{ partner_three_left_b_left.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId223" href="{% url 'common:index' %}?user_id={{ partner_three_left_b_left.member_child.id }}">{{ partner_three_left_b_left.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName225">{{ partner_three_left_b_left.member_child.name|title }}</span>
                             </td>
@@ -229,7 +228,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId226" id="Menu_hdnUserId226" />
-                                <a id="Menu_lnkUserId223" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId223&#39;,&#39;&#39;)">{{ partner_three_left_b_right.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId223" href="{% url 'common:index' %}?user_id={{ partner_three_left_b_right.member_child.id }}">{{ partner_three_left_b_right.member_child.mobile  }}</a>
                                 
                                 <br />
                                 <span id="Menu_lblName226">{{ partner_three_left_b_right.member_child.name|title }}</span>
@@ -242,7 +241,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId227" id="Menu_hdnUserId227" value="363" />
-                                <a id="Menu_lnkUserId227" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId227&#39;,&#39;&#39;)">{{ partner_three_right_a_left.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId227" href="{% url 'common:index' %}?user_id={{ partner_three_right_a_left.member_child.id }}">{{ partner_three_right_a_left.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName227">{{ partner_three_right_a_left.member_child.name|title }}</span>
                             </td>
@@ -254,7 +253,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId228" id="Menu_hdnUserId228" value="364" />
-                                <a id="Menu_lnkUserId228" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId228&#39;,&#39;&#39;)">{{ partner_three_right_a_right.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId228" href="{% url 'common:index' %}?user_id={{ partner_three_right_a_right.member_child.id }}">{{ partner_three_right_a_right.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName228">{{ partner_three_right_a_right.member_child.name|title }}</span>
                             </td>
@@ -266,7 +265,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId229" id="Menu_hdnUserId229" value="14" />
-                                <a id="Menu_lnkUserId229" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId229&#39;,&#39;&#39;)">{{ partner_three_right_b_left.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId229" href="{% url 'common:index' %}?user_id={{ partner_three_right_b_left.member_child.id }}">{{ partner_three_right_b_left.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName229">{{ partner_three_right_b_left.member_child.name|title }}</span>
                             </td>
@@ -278,7 +277,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId230" id="Menu_hdnUserId230" value="15" />
-                                <a id="Menu_lnkUserId230" href="javascript:__doPostBack(&#39;ctl00$Menu$lnkUserId230&#39;,&#39;&#39;)">{{ partner_three_right_b_right.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId230" href="{% url 'common:index' %}?user_id={{ partner_three_right_b_right.member_child.id }}">{{ partner_three_right_b_right.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName230">{{ partner_three_right_b_right.member_child.name|title }}</span>
                             </td>
