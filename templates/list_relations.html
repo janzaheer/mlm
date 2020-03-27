@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content-wrapper">
+<section class="content-header">
+    <h1>
+    MLM
+    <small>Multilevel Marketing</small>
+    </h1>
+    <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active">Relations List</li>
+    </ol>
+</section>
+<section class="content">
+      <!-- COLOR PALETTE -->
+      <div class="box box-default color-palette-box">
+        <div class="box-header with-border">
+          <h3 class="box-title"><i class="fa fa-tag"></i> Members</h3>
+        </div>
+        <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Member ID</th>
+                        <th>Name</th>
+                        <th>Phone No</th>
+                        <th>Sponser ID</th>
+                        <th>Sponser Phone</th>
+                        <th>Email</th>
+                        <th>Position</th>
+                        <th>Gender</th>
+                        <th>Step ID</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for partner in object_list %}
+                        <tr>
+                            <td>{{ partner.member_child.id }}</td>
+                            <td>{{ partner.member_child.name|title }}</td>
+                            <td>{{ partner.member_child.mobile }}</td>
+                            <td>{{ partner.member_parent.id }}</td>
+                            <td>{{ partner.member_parent.mobile }}</td>
+                            <td>{{ partner.member_child.user.email }}</td>
+                            <td>{{ partner.position }}</td>
+                            <td>{{ partner.member_child.gender }}</td>
+                            <td>{{ partner.member_child.step_id }}</td>
+                            <td>
+                                <a href="#"><button class="btn btn-primary btn-xs">Edit</button></a>
+                                <a href="#"><button class="btn btn-danger btn-xs">Delete</button></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+        </div>
+      </div>
+</section>   
+</div>  
+{% endblock %}

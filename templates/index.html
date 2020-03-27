@@ -25,27 +25,26 @@
             <div class="row">
 
                         <div class="middle">
-                            <!-- <div class="content-header">
-                                <table cellspacing="0">
-                                    <tr>
-                                        <td>
-                                            <h3 class="head-dashboard">
-                                                Downline for Step 1 ==> Bronze Tree</h3>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div> -->
                             <div class="dashboard-container">  
                     <form action="{% url 'common:index' %}" method='get'>        
-                        <div class="col-lg-1 col-lg-offset-4">
+                        <div class="col-lg-1 col-lg-offset-2">
                             <label>Enter User ID: </label>
                         </div>
                         <div class="col-lg-2">
-                            <input type="number" name="user_id" placeholder="Enter Member ID" class="form-control" value="{{ member.0.id }}"></input>
+                            <input type="number" name="user_id" placeholder="Enter User ID" class="form-control" value="{{ member.0.mobile }}"></input>
                         </div>
                         <div class="col-lg-2">
                             <button type="submit" class="btn btn-primary">Filter</button>
                         </div>
+
+                        <div class="col-lg-2">
+                            <select class="form-control" id="step-select">
+                                <option value='1' {% if step_kw == '1' %}selected="selected"{% endif %}>Step 1</option>
+                                <option value='2' {% if step_kw == '2' %}selected="selected"{% endif %}>Step 2</option>
+                                <option value='3' {% if step_kw == '3' %}selected="selected"{% endif %}>Step 3</option>
+                            </select>
+                        </div>
+
                     </form>            
                     <table id="Menu_tblMain" style="width: 100%;">
                     <tr>
@@ -67,19 +66,15 @@
                     </tr>
                     <tr>
                         <td colspan="8" align="center">
-                                {% if level_one or member.0 %}
+                                {% if level_one %}
                                     <img id="Menu_img" src="{% static 'dist/img/redicon.gif'%}" style="height:46px;width:57px;" />
                                 {% else %}
                                     <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
                                 {% endif %}
                                 <br />
-                                {% if level_one %}
-                                    <a id="Menu_lnkUserId" href="{% url 'common:index' %}?user_id={{ level_one.member_parent.id }}">{{ level_one.member_parent.mobile }}</a>
-                                {% else %}
-                                    <a id="Menu_lnkUserId" href="{% url 'common:index' %}?user_id={{ member.0.id }}">{{ member.0.mobile }}</a>
-                                {% endif %}
+                                <a id="Menu_lnkUserId" href="{% url 'common:index' %}?user_id={{ level_one.member_parent.mobile }}{{ level_one.mobile}}&step_id={{ step_kw }}">{{ level_one.member_parent.mobile }}{{ level_one.mobile }}</a>
                                 <br />
-                                <span id="Menu_lblName">{% if level_one %}{{ level_one.member_parent.name|title }}{% else %}{{ member.0.name|title }}{% endif %}</span>
+                                <span id="Menu_lblName">{{ level_one.member_parent.name|title }}{{ level_one.name|title }}</span>
                         </td>
                         <td align="center">
                                 &nbsp;
@@ -98,7 +93,7 @@
                                     <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
                                 {% endif %}
                                 <br />
-                                <a id="Menu_lnkUserId11" href="{% url 'common:index' %}?user_id={{ partner_one_left.member_child.id }}">{{ partner_one_left.member_child.mobile }}</a>
+                                <a id="Menu_lnkUserId11" href="{% url 'common:index' %}?user_id={{ partner_one_left.member_child.mobile }}&step_id={{ step_kw }}">{{ partner_one_left.member_child.mobile }}</a>
                                 <br />
                                 <span id="Menu_lblName11">{{ partner_one_left.member_child.name|title }}</span>
                             </td>
@@ -110,7 +105,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId12" id="Menu_hdnUserId12" value="11" />
-                                <a id="Menu_lnkUserId12" href="{% url 'common:index' %}?user_id={{ partner_one_right.member_child.id }}">{{ partner_one_right.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId12" href="{% url 'common:index' %}?user_id={{ partner_one_right.member_child.mobile }}&step_id={{ step_kw }}">{{ partner_one_right.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName12">{{ partner_one_right.member_child.name|title }}</span>
                             </td>
@@ -132,7 +127,7 @@
                                     <img id="Menu_img225" src="{% static 'dist/img/blank.png' %}" style="height:46px;width:57px;" />
                                 {% endif %}
                                 <br />
-                                <a id="Menu_lnkUserId121" href="{% url 'common:index' %}?user_id={{ partner_two_a_left.member_child.id }}">{{ partner_two_a_left.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId121" href="{% url 'common:index' %}?user_id={{ partner_two_a_left.member_child.mobile }}&step_id={{ step_kw }}">{{ partner_two_a_left.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName121">{{ partner_two_a_left.member_child.name|title }}</span>
                             </td>
@@ -144,7 +139,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId122" id="Menu_hdnUserId122" value="261" />
-                                <a id="Menu_lnkUserId122" href="{% url 'common:index' %}?user_id={{ partner_two_a_right.member_child.id }}">{{ partner_two_a_right.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId122" href="{% url 'common:index' %}?user_id={{ partner_two_a_right.member_child.mobile }}&step_id={{ step_kw }}">{{ partner_two_a_right.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName122">{{ partner_two_a_right.member_child.name|title }}</span>
                             </td>
@@ -156,7 +151,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId221" id="Menu_hdnUserId221" value="362" />
-                                <a id="Menu_lnkUserId221" href="{% url 'common:index' %}?user_id={{ partner_two_b_left.member_child.id }}">{{ partner_two_b_left.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId221" href="{% url 'common:index' %}?user_id={{ partner_two_b_left.member_child.mobile }}&step_id={{ step_kw }}">{{ partner_two_b_left.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName221">{{ partner_two_b_left.member_child.name|title }}</span>
                             </td>
@@ -168,7 +163,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId222" id="Menu_hdnUserId222" value="13" />
-                                <a id="Menu_lnkUserId222" href="{% url 'common:index' %}?user_id={{ partner_two_b_right.member_child.id }}">{{ partner_two_b_right.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId222" href="{% url 'common:index' %}?user_id={{ partner_two_b_right.member_child.mobile }}&step_id={{ step_kw }}">{{ partner_two_b_right.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName222">{{ partner_two_b_right.member_child.name|title }}</span>
                             </td>
@@ -196,7 +191,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId223" id="Menu_hdnUserId223" value="589" />
-                                <a id="Menu_lnkUserId223" href="{% url 'common:index' %}?user_id={{ partner_three_left_a_left.member_child.id }}">{{ partner_three_left_a_left.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId223" href="{% url 'common:index' %}?user_id={{ partner_three_left_a_left.member_child.mobile }}&step_id={{ step_kw }}">{{ partner_three_left_a_left.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName223">{{ partner_three_left_a_left.member_child.name|title }}</span>
                             </td>
@@ -208,7 +203,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId224" id="Menu_hdnUserId224" />
-                                <a id="Menu_lnkUserId223" href="{% url 'common:index' %}?user_id={{ partner_three_left_a_right.member_child.id }}">{{ partner_three_left_a_right.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId223" href="{% url 'common:index' %}?user_id={{ partner_three_left_a_right.member_child.mobile }}&step_id={{ step_kw }}">{{ partner_three_left_a_right.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName224">{{ partner_three_left_a_right.member_child.name|title }}</span>
                             </td>
@@ -220,7 +215,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId225" id="Menu_hdnUserId225" />
-                                <a id="Menu_lnkUserId223" href="{% url 'common:index' %}?user_id={{ partner_three_left_b_left.member_child.id }}">{{ partner_three_left_b_left.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId223" href="{% url 'common:index' %}?user_id={{ partner_three_left_b_left.member_child.mobile }}&step_id={{ step_kw }}">{{ partner_three_left_b_left.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName225">{{ partner_three_left_b_left.member_child.name|title }}</span>
                             </td>
@@ -232,7 +227,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId226" id="Menu_hdnUserId226" />
-                                <a id="Menu_lnkUserId223" href="{% url 'common:index' %}?user_id={{ partner_three_left_b_right.member_child.id }}">{{ partner_three_left_b_right.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId223" href="{% url 'common:index' %}?user_id={{ partner_three_left_b_right.member_child.mobile }}&step_id={{ step_kw }}">{{ partner_three_left_b_right.member_child.mobile  }}</a>
                                 
                                 <br />
                                 <span id="Menu_lblName226">{{ partner_three_left_b_right.member_child.name|title }}</span>
@@ -245,7 +240,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId227" id="Menu_hdnUserId227" value="363" />
-                                <a id="Menu_lnkUserId227" href="{% url 'common:index' %}?user_id={{ partner_three_right_a_left.member_child.id }}">{{ partner_three_right_a_left.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId227" href="{% url 'common:index' %}?user_id={{ partner_three_right_a_left.member_child.mobile }}&step_id={{ step_kw }}">{{ partner_three_right_a_left.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName227">{{ partner_three_right_a_left.member_child.name|title }}</span>
                             </td>
@@ -257,7 +252,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId228" id="Menu_hdnUserId228" value="364" />
-                                <a id="Menu_lnkUserId228" href="{% url 'common:index' %}?user_id={{ partner_three_right_a_right.member_child.id }}">{{ partner_three_right_a_right.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId228" href="{% url 'common:index' %}?user_id={{ partner_three_right_a_right.member_child.mobile }}&step_id={{ step_kw }}">{{ partner_three_right_a_right.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName228">{{ partner_three_right_a_right.member_child.name|title }}</span>
                             </td>
@@ -269,7 +264,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId229" id="Menu_hdnUserId229" value="14" />
-                                <a id="Menu_lnkUserId229" href="{% url 'common:index' %}?user_id={{ partner_three_right_b_left.member_child.id }}">{{ partner_three_right_b_left.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId229" href="{% url 'common:index' %}?user_id={{ partner_three_right_b_left.member_child.mobile }}&step_id={{ step_kw }}">{{ partner_three_right_b_left.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName229">{{ partner_three_right_b_left.member_child.name|title }}</span>
                             </td>
@@ -281,7 +276,7 @@
                                 {% endif %}
                                 <br />
                                 <input type="hidden" name="ctl00$Menu$hdnUserId230" id="Menu_hdnUserId230" value="15" />
-                                <a id="Menu_lnkUserId230" href="{% url 'common:index' %}?user_id={{ partner_three_right_b_right.member_child.id }}">{{ partner_three_right_b_right.member_child.mobile  }}</a>
+                                <a id="Menu_lnkUserId230" href="{% url 'common:index' %}?user_id={{ partner_three_right_b_right.member_child.mobile }}&step_id={{ step_kw }}">{{ partner_three_right_b_right.member_child.mobile  }}</a>
                                 <br />
                                 <span id="Menu_lblName230">{{ partner_three_right_b_right.member_child.name|title }}</span>
                             </td>
@@ -303,9 +298,8 @@
     <script src="{% static 'bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
   <script>
   $(function(){
-      $('#select-user option:contains("{{ user_kw }}")').prop('selected',true);
-      $('#select-user').on('change', function(){
-          window.location.href = '{% url 'common:index' %}?user_id=' + $(this).val()
+      $('#step-select').on('change', function(){
+          window.location.href = '{% url 'common:index' %}?step_id=' + $(this).val()
       });
   });
   </script>

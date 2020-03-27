@@ -8,7 +8,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 
 class MemberAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'mobile', 'gender')
+    list_display = ('__str__', 'mobile', 'gender', 'user', 'created_user', 'step_id')
 
 
 class PartnerAdmin(admin.ModelAdmin):

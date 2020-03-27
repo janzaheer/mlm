@@ -43,12 +43,34 @@ class IndexView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
+        me_member = Member.objects.filter(
+            created_user__id=self.request.user.id,
+            mobile=self.request.GET.get('user_id')
+        )
+
         context.update({
-            'member': Member.objects.filter(id=self.request.GET.get('user_id', 1))
+            'member': me_member,
+            'step_kw': self.request.GET.get('step_id', 1)
         })
 
         # Level One
-        level_one = Partner.objects.filter(member_parent__id=self.request.GET.get('user_id', 1), member_parent__step_id=self.request.GET.get('step_id', 1))
+        level_one = Partner.objects.filter(
+            member_parent__step_id=self.request.GET.get('step_id', 1),
+            member_parent__created_user__id=self.request.user.id
+        )
+
+        if level_one:
+            if self.request.GET.get('user_id') and  not level_one.filter(member_parent__mobile=self.request.GET.get('user_id')).exists():
+                level_one = Member.objects.filter(mobile=self.request.GET.get('user_id'))
+            elif self.request.GET.get('user_id'):
+                level_one = level_one.filter(
+                    member_parent__mobile=self.request.GET.get('user_id')
+                )
+            else:
+                level_one = level_one.filter(
+                    member_parent__mobile=level_one[0].member_parent.mobile
+                )
+
         if level_one:
             try:
                 partner_one_left = level_one.get(position=Partner.POSITION_LEFT)
@@ -71,7 +93,11 @@ class IndexView(LoginRequiredMixin, TemplateView):
         
         if partner_one_left:
             try:
-                level_two_a = Partner.objects.filter(member_parent__id=partner_one_left.member_child.id, member_parent__step_id=self.request.GET.get('step_id', 1))
+                level_two_a = Partner.objects.filter(
+                    member_parent__id=partner_one_left.member_child.id, 
+                    member_parent__step_id=self.request.GET.get('step_id', 1),
+                    member_parent__created_user__id=self.request.user.id
+                )
             except:
                 level_two_a = None
             
@@ -97,7 +123,11 @@ class IndexView(LoginRequiredMixin, TemplateView):
         # Level Two Right
         if partner_one_right:
             try:
-                level_two_b = Partner.objects.filter(member_parent__id=partner_one_right.member_child.id, member_parent__step_id=self.request.GET.get('step_id', 1))
+                level_two_b = Partner.objects.filter(
+                    member_parent__id=partner_one_right.member_child.id,
+                    member_parent__step_id=self.request.GET.get('step_id', 1),
+                    member_parent__created_user__id=self.request.user.id
+                )
             except:
                 level_two_b = None
             
@@ -123,7 +153,11 @@ class IndexView(LoginRequiredMixin, TemplateView):
         # Level Three Left A
         if partner_two_a_left:
             try:
-                level_three_a = Partner.objects.filter(member_parent__id=partner_two_a_left.member_child.id, member_parent__step_id=self.request.GET.get('step_id', 1))
+                level_three_a = Partner.objects.filter(
+                    member_parent__id=partner_two_a_left.member_child.id,
+                    member_parent__step_id=self.request.GET.get('step_id', 1),
+                    member_parent__created_user__id=self.request.user.id
+                )
             except:
                 level_three_a = None
             
@@ -149,7 +183,11 @@ class IndexView(LoginRequiredMixin, TemplateView):
         #Level Three Left B
         if partner_two_a_right:
             try:
-                level_three_b = Partner.objects.filter(member_parent__id=partner_two_a_right.member_child.id, member_parent__step_id=self.request.GET.get('step_id', 1))
+                level_three_b = Partner.objects.filter(
+                    member_parent__id=partner_two_a_right.member_child.id,
+                    member_parent__step_id=self.request.GET.get('step_id', 1),
+                    member_parent__created_user__id=self.request.user.id
+                )
             except:
                 level_three_b = None
             
@@ -175,7 +213,11 @@ class IndexView(LoginRequiredMixin, TemplateView):
         # Level Three Right A
         if partner_two_b_left:
             try:
-                level_three_c = Partner.objects.filter(member_parent__id=partner_two_b_left.member_child.id, member_parent__step_id=self.request.GET.get('step_id', 1))
+                level_three_c = Partner.objects.filter(
+                    member_parent__id=partner_two_b_left.member_child.id,
+                    member_parent__step_id=self.request.GET.get('step_id', 1),
+                    member_parent__created_user__id=self.request.user.id
+                )
             except:
                 level_three_c = None
             
@@ -201,7 +243,11 @@ class IndexView(LoginRequiredMixin, TemplateView):
         # Level Three Right B
         if partner_two_b_right:
             try:
-                level_three_d = Partner.objects.filter(member_parent__id=partner_two_b_right.member_child.id, member_parent__step_id=self.request.GET.get('step_id', 1))
+                level_three_d = Partner.objects.filter(
+                    member_parent__id=partner_two_b_right.member_child.id,
+                    member_parent__step_id=self.request.GET.get('step_id', 1),
+                    member_parent__created_user__id=self.request.user.id
+                )
             except:
                 level_three_d = None
             
@@ -227,23 +273,45 @@ class IndexView(LoginRequiredMixin, TemplateView):
         return context
     
 
+from django.contrib.auth import forms as auth_forms
+from django.db import transaction
 
 class CreateMemberFormView(LoginRequiredMixin, FormView):
     template_name = 'create_member.html'
-    form_class = MemberForm
+    form_class = auth_forms.UserCreationForm
 
     def form_valid(self, form):
+        
+        with transaction.atomic():
+            try:
+                member_parent = Member.objects.get(
+                    mobile=self.request.POST.get('parent_phone')
+                )
+            except:
+                raise Http404('Sponser doesnot exists')
 
-        member_parent = Member.objects.get(id=self.request.POST.get('parent_id'))
-        member = form.save()
+            user = form.save()
 
-        partner = Partner.objects.create(
-            member_parent=member_parent,
-            member_child=member,
-            position=self.request.POST.get('position')
-        )
+            member_form_kwargs = {
+                'user': user.id,
+                'name': self.request.POST.get('name'),
+                'mobile': self.request.POST.get('username'),
+                'gender': self.request.POST.get('gender'),
+                'step_id': self.request.POST.get('step_id'),
+                'created_user': self.request.user.id
+            }
+            
+            member_form = MemberForm(member_form_kwargs)
+            if member_form.is_valid():
+                member = member_form.save()
 
-        return HttpResponseRedirect(reverse('common:index'))
+            partner = Partner.objects.create(
+                member_parent=member_parent,
+                member_child=member,
+                position=self.request.POST.get('position')
+            )
+
+        return HttpResponseRedirect(reverse('common:list_relations'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -255,3 +323,24 @@ class MemberList(LoginRequiredMixin, ListView):
     model = Member
     template_name='list_member.html'
     pagination_by=100
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if queryset:
+            return queryset.filter(created_user=self.request.user)
+        else:
+            return Member.objects.filter(created_user=self.request.user)
+
+
+
+class MemberRelationsList(LoginRequiredMixin, ListView):
+    model = Partner
+    template_name='list_relations.html'
+    pagination_by=100
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if queryset:
+            return queryset.filter(member_parent__created_user=self.request.user)
+        else:
+            return Partner.objects.filter(member_parent__created_user=self.request.user)
