@@ -27,7 +27,7 @@
                         <div class="middle">
                             <div class="dashboard-container">  
                     <form action="{% url 'common:index' %}" method='get'>        
-                        <div class="col-lg-1 col-lg-offset-2">
+                        <div class="col-lg-1 {% if request.user.is_superuser %}col-lg-offset-2{% else %}col-lg-offset-4{% endif %}">
                             <label>Enter User ID: </label>
                         </div>
                         <div class="col-lg-2">
@@ -37,13 +37,15 @@
                             <button type="submit" class="btn btn-primary">Filter</button>
                         </div>
 
-                        <div class="col-lg-2">
-                            <select class="form-control" id="step-select">
-                                <option value='1' {% if step_kw == '1' %}selected="selected"{% endif %}>Step 1</option>
-                                <option value='2' {% if step_kw == '2' %}selected="selected"{% endif %}>Step 2</option>
-                                <option value='3' {% if step_kw == '3' %}selected="selected"{% endif %}>Step 3</option>
-                            </select>
-                        </div>
+                        {% if request.user.is_superuser %}
+                            <div class="col-lg-2">
+                                <select class="form-control" id="step-select">
+                                    <option value='1' {% if step_kw == '1' %}selected="selected"{% endif %}>Step 1</option>
+                                    <option value='2' {% if step_kw == '2' %}selected="selected"{% endif %}>Step 2</option>
+                                    <option value='3' {% if step_kw == '3' %}selected="selected"{% endif %}>Step 3</option>
+                                </select>
+                            </div>
+                        {% endif %}
 
                     </form>            
                     <table id="Menu_tblMain" style="width: 100%;">
