@@ -410,23 +410,8 @@ class MemberList(LoginRequiredMixin, SuperUserMixin, ListView):
     template_name='list_member.html'
     paginate_by=20
 
-    # def get_queryset(self):
-        # queryset = super().get_queryset()
-        # if queryset:
-            # return queryset.filter(created_user=self.request.user)
-        # else:
-            # return Member.objects.filter(created_user=self.request.user)
-
-
 
 class MemberRelationsList(LoginRequiredMixin, SuperUserMixin, ListView):
     model = Partner
     template_name='list_relations.html'
     paginate_by=20
-
-    # def get_queryset(self):
-        # queryset = super().get_queryset()
-        # if queryset:
-            # return queryset.filter(member_parent__created_user=self.request.user)
-        # else:
-            # return Partner.objects.filter(member_parent__created_user=self.request.user)
