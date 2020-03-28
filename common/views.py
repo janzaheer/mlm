@@ -4,7 +4,10 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import authenticate
 from django.urls import reverse, reverse_lazy
 
-from django.views.generic import TemplateView, FormView, RedirectView, ListView
+from django.views.generic import (
+    TemplateView, FormView, RedirectView, ListView,
+    UpdateView, DeleteView, View
+)
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -317,6 +320,72 @@ class CreateMemberFormView(LoginRequiredMixin, FormView):
         context = super().get_context_data(**kwargs)
         # context[""] = 
         return context
+
+
+
+class MemberUpadateTemplateView(LoginRequiredMixin, TemplateView):
+    template_name = 'update_member.html'
+    # form_class = auth_forms.UserCreationForm
+    # model = Partner
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        partner = Partner.objects.get(id=kwargs.get('pk'))
+        context.update({
+            'object': partner
+        }) 
+        return context
+
+
+class MemberUpdateView(LoginRequiredMixin, View):
+     
+    def post(self, request, *args, **kwargs):
+        username = self.request.POST.get('username')
+        parent_phone = self.request.POST.get('parent_phone')
+        name = self.request.POST.get('name')
+        email_address = self.request.POST.get('email_address')
+        gender = self.request.POST.get('gender')
+        position = self.request.POST.get('position')
+        step_id = self.request.POST.get('step_id')
+
+        partner = Partner.objects.get(id=self.kwargs.get('pk'))
+        parent_member = Member.objects.get(mobile=parent_phone)
+
+        partner.position = position
+        partner.member_parent = parent_member
+
+        partner.save()
+
+        partner.member_child.gender = gender
+        partner.member_child.step_id = step_id
+        partner.member_child.mobile = username
+        partner.member_child.name = name
+
+        partner.member_child.save()
+
+        if partner.member_child.user:
+            user = User.objects.get(
+                username=partner.member_child.user.username)
+            user.username = username
+            user.email = email_address
+            user.save()
+        else:
+            user = User.objects.create(
+                username=username, email=email_address)
+
+            partner.member_child.user = user
+            partner.member_child.save()
+            
+
+        return HttpResponseRedirect(reverse('common:list_relations'))
+    
+
+class MemberRelationDeleteView(LoginRequiredMixin, DeleteView):
+    model = User
+    success_url = reverse_lazy('common:list_relations')
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
 
 
 class MemberList(LoginRequiredMixin, ListView):

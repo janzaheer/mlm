@@ -68,7 +68,7 @@ class Partner(models.Model):
     )
 
     member_child = models.ForeignKey(
-        Member, related_name='member_as_child', on_delete=models.SET_NULL,
+        Member, related_name='member_as_child', on_delete=models.CASCADE,
          blank=True, null=True
     )
 
@@ -76,7 +76,6 @@ class Partner(models.Model):
         max_length=100, default=POSITION_LEFT, choices=POSITIONS,
         blank=True, null=True
     )
-    step_id = models.IntegerField(blank=True, null=True, default=1)
 
     def __str__(self):
         return self.member_parent.name

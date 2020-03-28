@@ -47,8 +47,8 @@
                             <td>{{ partner.member_child.gender }}</td>
                             <td>{{ partner.member_child.step_id }}</td>
                             <td>
-                                <a href="#"><button class="btn btn-primary btn-xs">Edit</button></a>
-                                <a href="#"><button class="btn btn-danger btn-xs">Delete</button></a>
+                                <a href="{% url 'common:update_member_form' pk=partner.id %}"><button class="btn btn-primary btn-xs">Edit</button></a>
+                                <a href="{% if partner.member_child.user %}{% url 'common:delete_relations' pk=partner.member_child.user.id %}{% endif %}"><button class="btn btn-danger btn-xs">Delete</button></a>
                             </td>
                         </tr>
                     {% endfor %}

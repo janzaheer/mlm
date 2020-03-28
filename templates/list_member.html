@@ -27,6 +27,7 @@
                         <th>Mobile No</th>
                         <th>Gender</th>
                         <th>Step ID</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,6 +38,9 @@
                             <td>{{ member.mobile }}</td>
                             <td>{{ member.gender }}</td>
                             <td>{{ member.step_id }}</td>
+                            <td>
+                                <a href="{% if member.user %}{% url 'common:delete_relations' pk=member.user.id %}{% endif %}"><button class="btn btn-danger btn-xs">Delete</button></a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

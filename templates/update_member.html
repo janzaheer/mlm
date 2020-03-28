@@ -23,51 +23,39 @@
             <div class="box-body">
                 {{form.errors}}
                 <div class="row">
-                    <form action="{% url 'common:create_member' %}" method="POST" autocomplete="off"><br>
+                    <form action="{% url 'common:update_member' pk=object.id %}" method="POST" autocomplete="off"><br>
                         {% csrf_token %}
                         <div class="col-lg-8 col-lg-offset-2">
                             <div class="row">
                                 <div class="col-lg-12">
                                     <label>Sponser ID</label>
-                                    <input type="number" class="form-control" placeholder="Sponser Phone No." name="parent_phone" required></input><br>
+                                    <input type="number" class="form-control" placeholder="Sponser Phone No." name="parent_phone" value="{{ object.member_parent.mobile }}" required></input><br>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <label>Phone No.</label>
-                                    <input type="text" class="form-control" placeholder="Enter Phone No." name="username" autocomplete="off" required></input><br>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <label>Password</label>
-                                    <input type="password" class="form-control" placeholder="Enter Password" name="password1" autocomplete="off" required></input><br>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <label>Confirm Password</label>
-                                    <input type="password" class="form-control" placeholder="Enter Confirm Password" name="password2" required></input><br>
+                                    <input type="text" class="form-control" placeholder="Enter Phone No." name="username" autocomplete="off" value="{{ object.member_child.mobile }}" required></input><br>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <label>Full Name</label>
-                                    <input type="text" class="form-control" placeholder="Enter Full Name" name="name" required></input><br>
+                                    <input type="text" class="form-control" placeholder="Enter Full Name" name="name" value="{{ object.member_child.name|title }}" required></input><br>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <label>Email Address</label>
-                                    <input type="email" class="form-control" placeholder="Enter Email Address" name="email"></input><br>
+                                    <input type="email" class="form-control" placeholder="Enter Email Address" name="email_address" value="{{ object.member_child.user.email }}"></input><br>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <label>Gender</label>
                                     <select class="form-control" name="gender">
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
+                                        <option value="male" {% if object.member_child.gender == 'male'%}selected="selected" {% endif%} >Male</option>
+                                        <option value="female" {% if object.member_child.gender == 'female'%}selected="selected" {% endif%}>Female</option>
                                     </select><br>
                                 </div>
                             </div>
@@ -75,8 +63,8 @@
                                 <div class="col-lg-12">
                                     <label>Position</label>
                                     <select class="form-control" name="position">
-                                        <option value="left">Left</option>
-                                        <option value="right">Right</option>
+                                        <option value="left" {% if object.position == 'left'%}selected="selected" {% endif%}>Left</option>
+                                        <option value="right" {% if object.position == 'right'%}selected="selected" {% endif%}>Right</option>
                                     </select><br>
                                 </div>
                             </div>
@@ -84,9 +72,9 @@
                                 <div class="col-lg-12">
                                     <label>Step ID</label>
                                     <select class="form-control" name="step_id">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
+                                        <option value="1" {% if object.member_child.step_id == '1'%}selected="selected" {% endif%}>1</option>
+                                        <option value="2" {% if object.member_child.step_id == '2'%}selected="selected" {% endif%} >2</option>
+                                        <option value="3" {% if object.member_child.step_id == '3'%}selected="selected" {% endif%} >3</option>
                                     </select><br>
                                 </div>
                             </div>
@@ -102,6 +90,4 @@
         </div>
       </section>  
     </div>
-
-
 {% endblock %}
