@@ -303,10 +303,11 @@ class CreateMemberFormView(LoginRequiredMixin, SuperUserMixin, FormView):
         with transaction.atomic():
             try:
                 member_parent = Member.objects.get(
-                    mobile=self.request.POST.get('parent_phone')
+                    mobile=self.request.POST.get('parent_phone'), 
+                    step_id=self.request.POST.get('step_id')
                 )
             except:
-                raise Http404('Sponser doesnot exists')
+                member_parent = ''
 
             user = form.save()
             user.eamil = self.request.POST.get('email')
@@ -325,11 +326,12 @@ class CreateMemberFormView(LoginRequiredMixin, SuperUserMixin, FormView):
             if member_form.is_valid():
                 member = member_form.save()
 
-            partner = Partner.objects.create(
-                member_parent=member_parent,
-                member_child=member,
-                position=self.request.POST.get('position')
-            )
+            if member_parent:
+                partner = Partner.objects.create(
+                    member_parent=member_parent,
+                    member_child=member,
+                    position=self.request.POST.get('position')
+                )
 
         return HttpResponseRedirect(reverse('common:list_relations'))
 
