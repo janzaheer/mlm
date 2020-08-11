@@ -81,7 +81,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
                     member_parent__mobile=level_one[0].member_parent.mobile
                 )
 
-        if not self.request.user.is_superuser:
+        if self.request.user.is_superuser:
             if not self.request.GET.get('user_id'):
                 level_one = Member.objects.filter(
                     user__id=self.request.user.id, step_id=self.request.GET.get('step_id', 1))
