@@ -33,12 +33,12 @@ class Member(models.Model):
         (GENDER_FEMALE, 'Female'),
     )
 
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         User, related_name="user_member", on_delete=models.CASCADE,
         blank=True, null=True
     )
     name = models.CharField(max_length=200)
-    mobile = models.CharField(max_length=20, unique=True, blank=True, null=True)
+    mobile = models.CharField(max_length=20, blank=True, null=True)
     gender = models.CharField(
         max_length=100, default=GENDER_MALE, choices=GENDERS,
         blank=True, null=True
@@ -48,6 +48,9 @@ class Member(models.Model):
         User, blank=True, null=True,
         related_name='user_creation_member', on_delete=models.SET_NULL
     )
+
+    class Meta:
+        unique_together = ('user', 'step_id')
 
     def __str__(self):
         return self.name

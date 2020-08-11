@@ -13,7 +13,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Partner, Member
-from .forms import MemberForm
+from .forms import MemberForm, PartnerForm
 
 
 class SuperUserMixin(object):
@@ -83,11 +83,12 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
         if not self.request.user.is_superuser:
             if not self.request.GET.get('user_id'):
-                level_one = Member.objects.filter(user__id=self.request.user.id)
-                if level_one[0].member_as_parent.exists():
+                level_one = Member.objects.filter(
+                    user__id=self.request.user.id, step_id=self.request.GET.get('step_id', 1))
+                if level_one and level_one[0].member_as_parent.exists():
                     level_one = level_one[0].member_as_parent.all()
-            else:
-                level_one = Partner.objects.filter(member_parent__mobile=self.request.GET.get('user_id'))
+            # else:
+            #     level_one = Partner.objects.filter(member_parent__mobile=self.request.GET.get('user_id'))
 
         if level_one:
             try:
@@ -303,14 +304,14 @@ class CreateMemberFormView(LoginRequiredMixin, SuperUserMixin, FormView):
         with transaction.atomic():
             try:
                 member_parent = Member.objects.get(
-                    mobile=self.request.POST.get('parent_phone'), 
+                    mobile=self.request.POST.get('parent_phone'),
                     step_id=self.request.POST.get('step_id')
                 )
             except:
                 member_parent = ''
 
             user = form.save()
-            user.eamil = self.request.POST.get('email')
+            user.email = self.request.POST.get('email')
             user.save()
 
             member_form_kwargs = {
@@ -326,12 +327,16 @@ class CreateMemberFormView(LoginRequiredMixin, SuperUserMixin, FormView):
             if member_form.is_valid():
                 member = member_form.save()
 
-            if member_parent:
-                partner = Partner.objects.create(
-                    member_parent=member_parent,
-                    member_child=member,
-                    position=self.request.POST.get('position')
-                )
+
+            partner_form_kwargs = {
+                'member_parent': member_parent.id,
+                'member_child': member.id,
+                'position': self.request.POST.get('position')
+            }
+
+            partner_form = PartnerForm(partner_form_kwargs)
+            if partner_form.is_valid():
+                partner_form.save()
 
         return HttpResponseRedirect(reverse('common:list_relations'))
 
