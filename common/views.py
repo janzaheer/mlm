@@ -13,7 +13,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Partner, Member
-from .forms import MemberForm
+from .forms import MemberForm, PartnerForm
 
 
 class SuperUserMixin(object):
@@ -21,18 +21,18 @@ class SuperUserMixin(object):
         if not self.request.user.is_superuser:
             raise Http404('Page not Found')
         return super().dispatch(request, *args, **kwargs)
-    
+
 
 class LoginView(FormView):
     form_class = auth_forms.AuthenticationForm
     template_name = 'login.html'
 
-    
+
     def form_valid(self, form):
         user = form.get_user()
         auth_login(self.request, user)
         return HttpResponseRedirect(reverse('common:index'))
-    
+
     def form_invalid(self, form):
         return super().form_invalid(form)
 
@@ -52,7 +52,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
+
         me_member = Member.objects.filter(
             created_user__id=self.request.user.id,
             mobile=self.request.GET.get('user_id')
@@ -81,44 +81,49 @@ class IndexView(LoginRequiredMixin, TemplateView):
                     member_parent__mobile=level_one[0].member_parent.mobile
                 )
 
-        if not self.request.user.is_superuser:
+        if self.request.user.is_superuser:
             if not self.request.GET.get('user_id'):
-                level_one = Member.objects.filter(user__id=self.request.user.id)
-                if level_one[0].member_as_parent.exists():
-                    level_one = level_one[0].member_as_parent.all()
-            else:
-                level_one = Partner.objects.filter(member_parent__mobile=self.request.GET.get('user_id'))
+                level_one = Member.objects.filter(
+                    user__id=self.request.user.id, step_id=self.request.GET.get('step_id', 1))
+                if level_one and level_one[0].member_as_parent.exists():
+                    level_one = level_one[0].member_as_parent.first()
+            # else:
+            #     level_one = Partner.objects.filter(member_parent__mobile=self.request.GET.get('user_id'))
 
         if level_one:
             try:
-                partner_one_left = level_one.get(position=Partner.POSITION_LEFT)
-            except:
+                partner_one_left = Partner.objects.filter(member_parent__id=level_one.id, position=Partner.POSITION_LEFT).last()
+                # partner_one_left = level_one.get(position=Partner.POSITION_LEFT)
+            except Exception as e:
+                print(e)
                 partner_one_left = None
             try:
-                partner_one_right = level_one.get(position=Partner.POSITION_RIGHT)
-            except:
+                partner_one_right = Partner.objects.filter(member_parent__id=level_one.id, position=Partner.POSITION_RIGHT).last()
+                # partner_one_right = level_one.get(position=Partner.POSITION_RIGHT)
+            except Exception as e:
+                print(e)
                 partner_one_right = None
         else:
             level_one = None
             partner_one_left = None
             partner_one_right = None
-        
+
         context.update({
-            'level_one': level_one[0] if level_one else None,
+            'level_one': level_one,
             'partner_one_left': partner_one_left,
             'partner_one_right': partner_one_right
         })
-        
+
         if partner_one_left:
             try:
                 level_two_a = Partner.objects.filter(
-                    member_parent__id=partner_one_left.member_child.id, 
+                    member_parent__id=partner_one_left.member_child.id,
                     member_parent__step_id=self.request.GET.get('step_id', 1),
                     # member_parent__created_user__id=self.request.user.id
                 )
             except:
                 level_two_a = None
-            
+
             try:
                 partner_two_a_left = level_two_a.get(position=Partner.POSITION_LEFT)
             except:
@@ -148,7 +153,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
                 )
             except:
                 level_two_b = None
-            
+
             try:
                 partner_two_b_left = level_two_b.get(position=Partner.POSITION_LEFT)
             except:
@@ -178,7 +183,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
                 )
             except:
                 level_three_a = None
-            
+
             try:
                 partner_three_left_a_left = level_three_a.get(position=Partner.POSITION_LEFT)
             except:
@@ -208,7 +213,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
                 )
             except:
                 level_three_b = None
-            
+
             try:
                 partner_three_left_b_left = level_three_b.get(position=Partner.POSITION_LEFT)
             except:
@@ -238,7 +243,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
                 )
             except:
                 level_three_c = None
-            
+
             try:
                 partner_three_right_a_left = level_three_c.get(position=Partner.POSITION_LEFT)
             except:
@@ -268,7 +273,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
                 )
             except:
                 level_three_d = None
-            
+
             try:
                 partner_three_right_b_left = level_three_d.get(position=Partner.POSITION_LEFT)
             except:
@@ -289,7 +294,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         })
 
         return context
-    
+
 
 from django.contrib.auth import forms as auth_forms
 from django.db import transaction
@@ -299,18 +304,18 @@ class CreateMemberFormView(LoginRequiredMixin, SuperUserMixin, FormView):
     form_class = auth_forms.UserCreationForm
 
     def form_valid(self, form):
-        
+
         with transaction.atomic():
             try:
                 member_parent = Member.objects.get(
-                    mobile=self.request.POST.get('parent_phone'), 
+                    mobile=self.request.POST.get('parent_phone'),
                     step_id=self.request.POST.get('step_id')
                 )
             except:
                 member_parent = ''
 
             user = form.save()
-            user.eamil = self.request.POST.get('email')
+            user.email = self.request.POST.get('email')
             user.save()
 
             member_form_kwargs = {
@@ -321,23 +326,27 @@ class CreateMemberFormView(LoginRequiredMixin, SuperUserMixin, FormView):
                 'step_id': self.request.POST.get('step_id'),
                 'created_user': self.request.user.id
             }
-            
+
             member_form = MemberForm(member_form_kwargs)
             if member_form.is_valid():
                 member = member_form.save()
 
-            if member_parent:
-                partner = Partner.objects.create(
-                    member_parent=member_parent,
-                    member_child=member,
-                    position=self.request.POST.get('position')
-                )
+
+            partner_form_kwargs = {
+                'member_parent': member_parent.id,
+                'member_child': member.id,
+                'position': self.request.POST.get('position')
+            }
+
+            partner_form = PartnerForm(partner_form_kwargs)
+            if partner_form.is_valid():
+                partner_form.save()
 
         return HttpResponseRedirect(reverse('common:list_relations'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context[""] = 
+        # context[""] =
         return context
 
 
@@ -352,12 +361,12 @@ class MemberUpadateTemplateView(LoginRequiredMixin, SuperUserMixin, TemplateView
         partner = Partner.objects.get(id=kwargs.get('pk'))
         context.update({
             'object': partner
-        }) 
+        })
         return context
 
 
 class MemberUpdateView(LoginRequiredMixin, SuperUserMixin, View):
-     
+
     def post(self, request, *args, **kwargs):
         username = self.request.POST.get('username')
         parent_phone = self.request.POST.get('parent_phone')
@@ -394,10 +403,10 @@ class MemberUpdateView(LoginRequiredMixin, SuperUserMixin, View):
 
             partner.member_child.user = user
             partner.member_child.save()
-            
+
 
         return HttpResponseRedirect(reverse('common:list_relations'))
-    
+
 
 class MemberRelationDeleteView(LoginRequiredMixin, SuperUserMixin, DeleteView):
     model = User
