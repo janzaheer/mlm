@@ -71,15 +71,15 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
         if level_one:
             if self.request.GET.get('user_id') and  not level_one.filter(member_parent__mobile=self.request.GET.get('user_id')).exists():
-                level_one = Member.objects.filter(mobile=self.request.GET.get('user_id'))
+                level_one = Member.objects.filter(mobile=self.request.GET.get('user_id')).first()
             elif self.request.GET.get('user_id'):
                 level_one = level_one.filter(
                     member_parent__mobile=self.request.GET.get('user_id')
-                )
+                ).first()
             else:
                 level_one = level_one.filter(
                     member_parent__mobile=level_one[0].member_parent.mobile
-                )
+                ).first()
 
         if self.request.user.is_superuser:
             if not self.request.GET.get('user_id'):
@@ -89,6 +89,9 @@ class IndexView(LoginRequiredMixin, TemplateView):
                     level_one = level_one[0].member_as_parent.first()
             # else:
             #     level_one = Partner.objects.filter(member_parent__mobile=self.request.GET.get('user_id'))
+
+        if level_one and level_one.__class__.__name__ == 'Partner':
+            level_one = level_one.member_parent
 
         if level_one:
             try:
