@@ -109,7 +109,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
             partner_one_right = None
 
         context.update({
-            'level_one': level_one[0] if level_one else None,
+            'level_one': level_one,
             'partner_one_left': partner_one_left,
             'partner_one_right': partner_one_right
         })
